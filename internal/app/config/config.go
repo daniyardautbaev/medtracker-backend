@@ -11,11 +11,11 @@ type Config struct {
 }
 
 type HTTPServerConfig struct {
-	Port string `env:"PORT" envDefault:"8080"`
+	Port string `env:"PORT" envDefault:"8081"`
 }
 
 type DBConfig struct {
-	URI string `env:"MONGO_URI" envDefault:"mongodb://localhost:27017"`
+	DSN string `env:"DSN" envDefault:"root@tcp(127.0.0.1:3306)/medtracker?parseTime=true"`
 }
 
 func NewConfig(filenames ...string) (*Config, error) {

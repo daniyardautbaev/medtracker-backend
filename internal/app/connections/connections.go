@@ -1,37 +1,28 @@
 package connections
 
 import (
-	"context"
+	"database/sql"
 	"fmt"
-	"log"
-
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	_ "github.com/go-sql-driver/mysql"
 	"medtracker/medtracker/internal/app/config"
 )
 
 type Connections struct {
-	DB *mongo.Client
+	DB *sql.DB
 }
 
 func NewConnections(cfg *config.Config) (*Connections, error) {
-	clientOptions := options.Client().ApplyURI(cfg.DB.URI)
-	client, err := mongo.Connect(context.Background(), clientOptions)
+	db, err := sql.Open("mysql", cfg.DB.DSN)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to MongoDB: %v", err)
+		return nil, fmt.Errorf("cannot connect to MySQL: %w", err)
 	}
-
-	// Проверим подключение
-	err = client.Ping(context.Background(), nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to ping MongoDB: %v", err)
+	if err := db.Ping(); err != nil {
+		return nil, fmt.Errorf("cannot ping MySQL: %w", err)
 	}
-
-	return &Connections{DB: client}, nil
+	return &Connections{DB: db}, nil
 }
-
 func (c *Connections) Close() {
-	if err := c.DB.Disconnect(context.Background()); err != nil {
-		log.Printf("Error closing MongoDB connection: %v", err)
+	if c.DB != nil {
+		_ = c.DB.Close()
 	}
 }
