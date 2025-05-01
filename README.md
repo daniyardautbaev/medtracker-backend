@@ -62,7 +62,6 @@
 
 # DB Structure
 
-## Table `users`
 ```sql
 TABLE `users` (
   `id` varchar(36) NOT NULL, 
@@ -130,6 +129,7 @@ TABLE `intake_logs` (
   CONSTRAINT `intake_logs_ibfk_1` FOREIGN KEY (`medication_id`) REFERENCES `medications` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+```
 
 Frontend
 
