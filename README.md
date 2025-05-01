@@ -60,19 +60,20 @@
 - `PUT /intake_logs/:id` — Обновление информации о записи.
 - `DELETE /intake_logs/:id` — Удаление записи из журнала приема.
 
-## Структура базы данных
+# DB Structure
 
-### Таблица пользователей (users)
-
+## Table `users`
+```sql
 TABLE `users` (
-  `id` varchar(36) NOT NULL,
+  `id` varchar(36) NOT NULL, 
   `name` varchar(100),
   `email` varchar(100),
   `password_hash` varchar(255),
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 Таблица пациентов (patients)
 
@@ -82,7 +83,8 @@ TABLE `patients` (
   `age` int,
   `condition` varchar(255),
   PRIMARY KEY (`id`)
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 Таблица медикаментов (medications)
@@ -96,11 +98,12 @@ TABLE `medications` (
   `start_date` date,
   `end_date` date,
   PRIMARY KEY (`id`)
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 Таблица напоминаний (reminders)
 
-CREATE TABLE `reminders` (
+TABLE `reminders` (
   `id` varchar(36) NOT NULL,
   `medication_id` varchar(36) NOT NULL,
   `time` varchar(5),
@@ -112,11 +115,12 @@ CREATE TABLE `reminders` (
   KEY `fk_reminders_user` (`user_id`),
   CONSTRAINT `fk_reminders_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reminders_ibfk_1` FOREIGN KEY (`medication_id`) REFERENCES `medications` (`id`)
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 Таблица журналов приёма (intake_logs)
 
-CREATE TABLE `intake_logs` (
+TABLE `intake_logs` (
   `id` varchar(36) NOT NULL,
   `medication_id` varchar(36),
   `taken_at` datetime,
@@ -124,7 +128,8 @@ CREATE TABLE `intake_logs` (
   PRIMARY KEY (`id`),
   KEY `medication_id` (`medication_id`),
   CONSTRAINT `intake_logs_ibfk_1` FOREIGN KEY (`medication_id`) REFERENCES `medications` (`id`) ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 Frontend
 
